@@ -28,12 +28,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
             throw new Error('Email or password incorrect')
         }
 
-    } catch (error) {
-        
+    } catch (error: Error) {
+
         if (error instanceof ValidationError) {
             return new Response(JSON.stringify({ message: error.message }), { status: 400 })
         }
 
-        return new Response(JSON.stringify({ message: error }), { status: 404 });
+        return new Response(JSON.stringify({ message: error.message }), { status: 404 });
     }
 }

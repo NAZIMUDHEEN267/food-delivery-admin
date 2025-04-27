@@ -60,13 +60,13 @@ export async function POST(req: NextRequest) {
                     `
         })
 
-        return new Response('Reset mail send to your mail.', { status: 200 })
+        return new Response(JSON.stringify({ message: 'Reset mail send to your mail.' }), { status: 200 })
 
-    } catch (error) {
+    } catch (error: Error) {
         if (error instanceof ValidationError) {
             return new Response(error.message, { status: 400 })
         }
 
-        return new Response(error as string, { status: 404 });
+        return new Response(JSON.stringify({ message: error.message }), { status: 404 });
     }
 }

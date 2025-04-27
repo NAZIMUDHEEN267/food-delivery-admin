@@ -1,0 +1,45 @@
+name: Run lint and test
+
+on: 
+  push: 
+    branches: 
+      - 'feature/**'
+
+jobs: 
+  lint-typescript:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+
+      - name: lint code
+        uses: npm run lint
+      
+      - name: check typescript
+        uses: npm run type-check
+      
+  auto-merge:
+    needs: lint-typescript
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps: 
+      - name: Auto merge to develop
+        uses: devops-infra/action-pull-request@v0.5.1
+        with: 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: ${{ github.ref_name }}
+          target_branch: develop
+          title: "Auto merge: ${{ github.ref_name }}"
+          body: "Auto-merged after lint, test, and type-check success ✅"
+          label: "auto-merge"
+          reviewers: ''
+          assignees: '' 
+
+      
