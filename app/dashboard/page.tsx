@@ -8,30 +8,35 @@ import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { useMutation } from '@tanstack/react-query';
 
-import { resetApi } from '@/queryApis/auth';
 import { ResetType } from '@/types/auth';
 import CommonInput from '@/components/CommonInput';
 import CustomButton from '@/components/CustomButton';
-import { resetSchema } from '@/schema/auth';
 import { useSearchParams } from 'next/navigation';
+import customAxios from '@/config/customAxios';
+import { useEffect } from 'react';
+import { useUser } from '@/context/UserContext';
+import { logoutApi } from '@/queryApis/auth';
 
 
 export default function Reset() {
 
     const searchParams = useSearchParams();
-    const token = searchParams.get('token');
+    const user = useUser()
+
+    // logoutApi()
 
     const { mutate } = useMutation<any, Error, ResetType>({
         mutationKey: ['reset-password'],
-        mutationFn: resetApi,
+        // mutationFn: resetApi,
         onSuccess: (data) => {
             toast.success('Password successfully changed.')
         },
         onError: (err: Error) => toast.error(err.message),
     });
+    
 
     const { control, formState: { errors }, handleSubmit } = useForm<ResetType>({
-        resolver: yupResolver(resetSchema)
+        // resolver: yupResolver(resetSchema)
     });
 
 

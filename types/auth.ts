@@ -21,6 +21,6 @@ export type LoginSuccessResponse = {
 export type ResetType = {
     conf_passwd?: string;
     passwd: string;
-    token: string;
-    userid: string
+    token?: string;
+    userid?: string
 }

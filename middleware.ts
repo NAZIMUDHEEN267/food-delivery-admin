@@ -4,8 +4,8 @@ export default function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicPaths = ['/login', '/reset', '/reset/success'].includes(pathname);
-  
+  const publicPaths = ['/login', '/forgot', '/'].includes(pathname);
+
   if (!token && !publicPaths) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
@@ -18,5 +18,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [ '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
 };
