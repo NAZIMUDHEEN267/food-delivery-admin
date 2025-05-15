@@ -1,15 +1,16 @@
 import customAxios from "@/config/customAxios"
-import { ForgotType, LoginSuccessResponse, LoginType, ResetType } from "@/types/auth"
+import { ForgotType, LoginSuccessResponse, LoginType } from "@/types/auth"
 
 
 export const loginApi = async (data: LoginType): Promise<LoginSuccessResponse> => {
-    return customAxios.post('/login', data)
+    return customAxios.post('/auth/sign-in', data)
 }
 
 export const forgotApi = (data: ForgotType): Promise<string> => {
-    return customAxios.post('/forgot', data)
+    return customAxios.post('/auth/forgot-password', data)
 }
 
-export const resetApi = (data: ResetType ): Promise<string> => {
-    return customAxios.post('/reset', data);
+
+export const logoutApi = (): Promise<string> => {
+    return customAxios.get('/auth/logout')
 }

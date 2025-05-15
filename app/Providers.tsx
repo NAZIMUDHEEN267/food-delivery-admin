@@ -1,5 +1,6 @@
 'use client';
 
+import { UserProvider } from "@/context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";
 import { ToastContainer } from "react-toastify";
@@ -13,8 +14,9 @@ export default function Providers({ children }: ProvidersProps) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {children}
-            <ToastContainer position="top-right" autoClose={3000} />
+            <UserProvider>
+                {children}
+            </UserProvider>
         </QueryClientProvider>
     )
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useState } from 'react'
 import { Control, useController, FieldValues } from 'react-hook-form'
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
