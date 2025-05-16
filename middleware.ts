@@ -4,7 +4,7 @@ export default function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicPaths = ['/login', '/forgot', '/'].includes(pathname);
+  const publicPaths = ['/login', '/forgot'].includes(pathname);
 
   if (!token && !publicPaths) {
     return NextResponse.redirect(new URL('/login', request.url));
