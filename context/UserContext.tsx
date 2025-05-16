@@ -1,15 +1,17 @@
 'use client';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const storage = localStorage.getItem('user')
-  if (storage && !user) {
-    setUser(JSON.parse(storage))
-  }
+  useEffect(() => {
+    const storage = localStorage.getItem('user')
+    if (storage && !user) {
+      setUser(JSON.parse(storage))
+    }
+  }, [])
 
   return (
     <UserContext.Provider value={{ user }}>
