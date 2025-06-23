@@ -31,12 +31,13 @@ jobs:
 
     - name: Copy files to server
       run: |
-        scp -o StrictHostKeyChecking=no -r .next public package.json ecosystem.config.js ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/nazim/food-delivery-admin/
-
+        scp -o StrictHostKeyChecking=no -r .next public package.json ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/deployer/food-delivery-admin
+    - name: who am i 
+      run: whoami
     - name: Restart app on server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-          cd /nazim/food-delivery-admin
-          npm install --omit=dev
-          pm2 restart next-app || pm2 start ecosystem.config.js
+          cd /home/deployer/food-delivery-admin
+          /home/deployer/.nvm/versions/node/v22.16.0/bin/npm install --omit=dev
+          /home/deployer/.nvm/versions/node/v22.16.0/bin/pm2 restart next-app
         EOF
