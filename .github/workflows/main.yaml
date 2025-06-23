@@ -1,11 +1,12 @@
 name: Deploy Next.js to VPS
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,22 +21,22 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build Next.js App
+    - name: Build Next.js
       run: npm run build
 
-    - name: Setup SSH
+    - name: Start SSH Agent
       uses: webfactory/ssh-agent@v0.8.0
       with:
         ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
-    
+
     - name: Copy files to server
       run: |
-        scp -r .next public package.json ecosystem.config.js ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/nazim/food-delivery-admin/
-    
-    - name: Run remote commands
+        scp -o StrictHostKeyChecking=no -r .next public package.json ecosystem.config.js ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/nazim/food-delivery-admin/
+
+    - name: Restart app on server
       run: |
-        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-          cd /nazim/food-delivery-admin/
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          cd /nazim/food-delivery-admin
           npm install --omit=dev
           pm2 restart next-app || pm2 start ecosystem.config.js
         EOF
