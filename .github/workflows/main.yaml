@@ -32,7 +32,8 @@ jobs:
     - name: Copy files to server
       run: |
         scp -o StrictHostKeyChecking=no -r .next public package.json ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/deployer/food-delivery-admin
-
+    - name: who am i 
+      run: whoami
     - name: Restart app on server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
