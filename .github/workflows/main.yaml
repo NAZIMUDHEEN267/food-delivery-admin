@@ -24,22 +24,20 @@ jobs:
     - name: Build Next.js App
       run: npm run build
 
-    - name: Copy project to VPS
-      uses: appleboy/scp-action@master
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.0
       with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        source: ".next,package.json,public,ecosystem.config.js"
-        target: "/nazim/food-delivery-admin"
-
-    - name: SSH into VPS and restart app
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          cd /nazim/food-delivery-admin
+        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+    
+    - name: Copy files to server
+      run: |
+        scp -r .next public package.json ecosystem.config.js ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/nazim/food-delivery-admin/
+    
+    - name: Run remote commands
+      run: |
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          cd /nazim/food-delivery-admin/
           npm install --omit=dev
-          pm2 start ecosystem.config.js --env production || pm2 restart next-app
+          pm2 restart next-app || pm2 start ecosystem.config.js
+        EOF
+
