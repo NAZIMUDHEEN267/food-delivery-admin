@@ -31,7 +31,7 @@ jobs:
 
     - name: Copy files to server
       run: |
-        scp -o StrictHostKeyChecking=no -r .next public package.json ecosystem.config.js ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/deployer/food-delivery-admin
+        scp -o StrictHostKeyChecking=no -r .next public package.json ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/deployer/food-delivery-admin
 
     - name: Restart app on server
       run: |
