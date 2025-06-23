@@ -38,6 +38,6 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
           cd /home/deployer/food-delivery-admin
-          npm install --omit=dev
-          pm2 restart next-app || pm2 start ecosystem.config.js
+          /home/deployer/.nvm/versions/node/v22.16.0/bin/npm install --omit=dev
+          /home/deployer/.nvm/versions/node/v22.16.0/bin/pm2 restart next-app || pm2 start ecosystem.config.js
         EOF
