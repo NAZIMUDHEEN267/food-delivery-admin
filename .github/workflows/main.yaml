@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Node
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
@@ -21,25 +21,25 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build Next.js
+    - name: Build Next.js App
       run: npm run build
 
-    - name: Upload via SSH
-      uses: appleboy/ssh-action@master
+    - name: Copy project to VPS
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        source: ".next,package.json,public"
-        target: "/home/youruser/nextapp"
+        source: ".next,package.json,public,ecosystem.config.js"
+        target: "/nazim/food-delivery-admin"
 
-    - name: SSH Restart Server
+    - name: SSH into VPS and restart app
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          cd /home/youruser/nextapp
+          cd /nazim/food-delivery-admin
           npm install --omit=dev
-          pm2 restart next-app || pm2 start npm --name "next-app" -- start
+          pm2 start ecosystem.config.js --env production || pm2 restart next-app
