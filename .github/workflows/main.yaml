@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check if SSH key secret exists
+      run: |
+        if [ -z "${{ secrets.SERVER_SSH_KEY }}" ]; then
+          echo "❌ SERVER_SSH_KEY is NOT set!"
+          exit 1
+        else
+          echo "✅ SERVER_SSH_KEY is available."
+        fi
+
     - name: Checkout code
       uses: actions/checkout@v3
 
